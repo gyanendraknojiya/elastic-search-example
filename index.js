@@ -23,9 +23,47 @@ app.get("/", async (req, res, next) => {
   });
 });
 
+app.get("/by-title/:title", async (req, res, next) => {
+  const {title} = req.params
+  console.log(title)
+  const result = await client.search({
+    index: "my-index",
+    body: {
+      query :{
+        match:{title}
+      }
+    },
+  });
+
+  return res.status(200).json({
+    result,
+  });
+});
+
+// app.post("/add", async (req, res, next) => {
+//   const { title, body } = req.body;
+//   await Notes.create({
+//     title,
+//     body,
+//   });
+
+//   const d = await client.index({
+//     index: "my-index",
+//     body: {
+//       title,
+//       body,
+//     },
+//   });
+
+//   return res.status(201).json({
+//     d,
+//   });
+// });
+
 app.post("/add", async (req, res, next) => {
   const { title, body } = req.body;
-  const response = await Notes.create({
+
+  Notes.create({
     title,
     body,
   });
